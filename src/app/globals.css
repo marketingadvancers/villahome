@@ -1,0 +1,498 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design tokens & component styles
+   Ported from the original site's compiled stylesheet. Tailwind v4 regenerates
+   every utility class from the JSX, so only the non-utility CSS lives here.
+--------------------------------------------------------------------------- */
+
+/* Palette: warm cream and gold, on the neutral base from 21st.dev's "Elegant
+   Luxury" theme with its red primary swapped for the gold family.
+
+   The page alternates dark and light bands, so the theme is three token sets:
+   the dark default, a light band, and the brand band used by the footer and the
+   track record. Every component reads these variables, so a repalette is
+   confined to this block.
+
+   Gold is only legible as *text* on the dark bands. On cream, the light band
+   uses the deep bronze `--brand` instead — a bright gold on cream sits around
+   2.7:1 and would fail contrast. */
+
+:root {
+  /* Dark bands: hero, image rails, location, news */
+  --bg: #1c1917;
+  --bg-alt: #292524;
+  --fg: #f5f5f4;
+  --muted: #e7e5e4;
+  --line: #f5f5f41f;
+  --accent: #d9a441;
+  --accent-2: #f0c97a;
+  --accent-soft: #d9a4412e;
+  --brand: #6e5423;
+  --brand-soft: #6e54232e;
+}
+
+.theme-brand {
+  /* Footer and the track-record band */
+  --bg: #6e5423;
+  --bg-alt: #5a4419;
+  --fg: #faf7f5;
+  --muted: #f5e8d2;
+  --line: #faf7f52e;
+  --accent: #f0c97a;
+  --accent-2: #fdf2d6;
+  --accent-soft: #f0c97a2e;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.theme-light {
+  /* Light bands: intro, holiday homes, residences, interiors, contact */
+  --bg: #faf7f5;
+  --bg-alt: #f0ebe8;
+  --fg: #1a1a1a;
+  --muted: #57534e;
+  --line: #1a1a1a1f;
+  --accent: var(--brand);
+  --accent-2: #8a6a2f;
+  --accent-soft: #6e54231f;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizelegibility;
+  font-size: 15px;
+  /* The header navigates within this page, so anchor jumps glide instead of
+     cutting, and stop clear of the fixed header. */
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+html,
+body {
+  max-width: 100%;
+  /* `clip` rather than `hidden`: `hidden` would turn these into scroll
+     containers, which silently breaks `position: sticky` in the pinned
+     sections. `clip` suppresses the sideways overflow without that side
+     effect. */
+  overflow-x: clip;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans-pri), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01", "ss02";
+  font-weight: 500;
+}
+
+@media (min-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1921px) {
+  html {
+    font-size: 0.937471vw;
+  }
+  .max-w-\[1400px\] {
+    max-width: 72.9vw;
+  }
+  .max-w-\[1280px\] {
+    max-width: 66.67vw;
+  }
+  .max-w-\[1100px\] {
+    max-width: 57.3vw;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* --- type styles ---------------------------------------------------------- */
+
+.font-display {
+  font-family: var(--font-display-alt), Georgia, "Times New Roman", serif;
+  letter-spacing: 0.07rem;
+  font-weight: 400;
+}
+
+.font-display-alt {
+  font-family: var(--font-display-alt), Georgia, "Times New Roman", serif;
+  letter-spacing: 0.07rem;
+}
+
+.font-script {
+  font-family: var(--font-script), var(--font-display-alt), "Brush Script MT", cursive;
+  letter-spacing: normal;
+  font-weight: 400;
+}
+
+.font-mono {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+.h-page {
+  letter-spacing: 0.07rem;
+  text-shadow: 0 0 0.6px;
+  overflow-wrap: break-word;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.08;
+}
+
+.h-section {
+  letter-spacing: 0.07rem;
+  overflow-wrap: break-word;
+  font-size: clamp(2rem, 5vw, 5rem);
+  line-height: 1.08;
+}
+
+:where(.theme-light) :where(.h-page, .h-section) {
+  color: var(--brand);
+}
+
+/* --- eyebrow -------------------------------------------------------------- */
+
+.eyebrow > :first-child::before {
+  content: "";
+  background: var(--accent);
+  vertical-align: middle;
+  width: 1.5rem;
+  height: 1.5px;
+  margin-bottom: 2px;
+  margin-right: 0.75rem;
+  display: inline-block;
+}
+
+.theme-brand .eyebrow > :first-child::before {
+  background: var(--accent);
+}
+
+.theme-light .eyebrow > :first-child::before {
+  background: var(--brand);
+  opacity: 0.9;
+}
+
+.eyebrow > :first-child {
+  letter-spacing: 5px;
+}
+
+/* --- animated stroke buttons --------------------------------------------- */
+
+.link-hover {
+  isolation: isolate;
+  border: 1px solid var(--accent);
+  justify-content: center;
+  align-items: center;
+  transition: color 0.4s;
+  display: inline-flex;
+  position: relative;
+}
+
+.link-hover .link-hover__circle {
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.link-hover .link-hover__circle rect {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: var(--len, 800);
+  stroke-dashoffset: var(--len, 800);
+  transition: stroke-dashoffset 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.link-hover:hover .link-hover__circle rect,
+.link-hover:focus-visible .link-hover__circle rect {
+  stroke-dashoffset: 0;
+}
+
+.link-hover--filled {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.link-hover--filled .link-hover__circle rect {
+  stroke: var(--fg);
+  stroke-width: 2px;
+}
+
+.theme-light .link-hover--filled .link-hover__circle rect {
+  stroke: var(--bg);
+  stroke-width: 2px;
+}
+
+.enquire-btn {
+  border: 1px solid var(--accent);
+}
+
+.stroke-hover__svg {
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.stroke-hover__svg rect {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5px;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: var(--len, 1600);
+  stroke-dashoffset: var(--len, 1600);
+  transition: stroke-dashoffset 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.stroke-hover:hover .stroke-hover__svg rect,
+.stroke-hover:focus-visible .stroke-hover__svg rect {
+  stroke-dashoffset: 0;
+}
+
+/* --- nav underline -------------------------------------------------------- */
+
+.nav-link {
+  padding-bottom: 4px;
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  background: var(--accent);
+  transform-origin: 100%;
+  height: 1.5px;
+  transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: scaleX(0);
+}
+
+.nav-link:hover::after,
+.nav-link:focus-visible::after,
+.nav-link[data-open="true"]::after {
+  transform-origin: 0;
+  transform: scaleX(1);
+}
+
+/* --- mega menu ------------------------------------------------------------ */
+
+/* The panel content is re-keyed per menu item, so these run on every switch
+   and carry the new panel in from the side the pointer came from. */
+@keyframes mega-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(48px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mega-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-48px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mega-in-right {
+  animation: 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both mega-in-right;
+}
+
+.mega-in-left {
+  animation: 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both mega-in-left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-in-right,
+  .mega-in-left {
+    animation: none;
+  }
+}
+
+/* --- lightbox ------------------------------------------------------------- */
+
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-fade {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lightbox-in {
+  animation: 0.25s ease-out both lightbox-in;
+}
+
+.lightbox-fade {
+  animation: 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) both lightbox-fade;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-in,
+  .lightbox-fade {
+    animation: none;
+  }
+}
+
+/* --- decorative ----------------------------------------------------------- */
+
+.brand-strip {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent) 35%,
+    var(--accent-2) 50%,
+    var(--accent) 65%,
+    transparent 100%
+  );
+  height: 4px;
+}
+
+.brand-rail {
+  background: var(--brand);
+  z-index: 40;
+  pointer-events: none;
+  width: 3px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 1023px) {
+  .brand-rail {
+    display: none;
+  }
+}
+
+/* --- keyframes ------------------------------------------------------------ */
+
+@keyframes scroll-line {
+  0% {
+    background-position: 0 220%;
+  }
+  to {
+    background-position: 0 -120%;
+  }
+}
+
+.animate-scroll-line {
+  background-image: linear-gradient(to bottom, transparent, var(--accent-2) 45%, transparent 80%);
+  background-repeat: no-repeat;
+  background-size: 100% 220%;
+  animation: 1.8s ease-in-out infinite scroll-line;
+}
+
+@keyframes places-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.places-fade {
+  animation: 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) places-fade-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll-line,
+  .places-fade {
+    animation: none;
+  }
+}
+
+/* --- fixed-attachment backdrops ------------------------------------------ */
+
+#iconic-bg {
+  background-image: url("/images/parallax-bg.jpg");
+}
+
+#sticky-reveal-bg {
+  background-image: url("/images/sticky-reveal.jpg");
+}
+
+@media (min-width: 1024px) and (pointer: fine) {
+  #iconic-bg,
+  #sticky-reveal-bg {
+    background-attachment: fixed;
+  }
+}
+
+/* --- scroll-reveal primitives -------------------------------------------- */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+[data-reveal][data-shown="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-word] {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+[data-shown="true"] [data-word] {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-word] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
