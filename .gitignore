@@ -141,3 +141,8 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Browser-automation scratch (screenshots, console logs, a11y snapshots)
+.playwright-mcp/
+test-results/
+playwright-report/
