@@ -1,0 +1,4 @@
+[submodule "emarat-nextjs"]
+	path = emarat-nextjs
+	url = https://github.com/sanant-uiux/emarat-nextjs.git
+	branch = master
